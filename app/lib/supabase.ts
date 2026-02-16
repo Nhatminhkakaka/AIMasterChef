@@ -1,9 +1,9 @@
 import { createBrowserClient } from "@supabase/ssr";
 
+console.log("SUPABASE FILE LOADED");
+
 export function createSupabaseClient() {
-  if (typeof window === "undefined") {
-    return null as any;
-  }
+  console.log("SUPABASE FUNCTION CALLED");
 
   return createBrowserClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
