@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { supabase } from "@/app/lib/supabase"
+import { createSupabaseClient } from "app/lib/supabase";
 import { useRouter } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
 
@@ -20,14 +20,14 @@ export default function SettingsPage() {
     const loadProfile = async () => {
       const {
         data: { user },
-      } = await supabase.auth.getUser()
+      } = await createSupabaseClient().auth.getUser()
 
       if (!user) {
         router.push("/login")
         return
       }
 
-      const { data } = await supabase
+      const { data } = await createSupabaseClient()
         .from("profiles")
         .select("*")
         .eq("id", user.id)
@@ -57,11 +57,11 @@ export default function SettingsPage() {
   const handleSaveProfile = async () => {
     const {
       data: { user },
-    } = await supabase.auth.getUser()
+    } = await createSupabaseClient().auth.getUser()
 
     if (!user) return
 
-    await supabase
+    await createSupabaseClient()
       .from("profiles")
       .update({
         full_name: fullName,

@@ -1,40 +1,43 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { useEffect, useState } from "react"
-import { createSupabaseClient } from "@/lib/supabase";
-import { useRouter } from "next/navigation"
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { createSupabaseClient } from "app/lib/supabase";
+import { useRouter } from "next/navigation";
+import { Session, User } from "@supabase/supabase-js";
 
 export default function Navbar() {
-  const router = useRouter()
-  const [user, setUser] = useState<any>(null)
-  const [loading, setLoading] = useState(true)
+  const router = useRouter();
+  const supabase = createSupabaseClient(); // ✅ tạo 1 lần duy nhất
+
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const getUser = async () => {
-      const { data } = await supabase.auth.getUser()
-      setUser(data.user)
-      setLoading(false)
-    }
+      const { data } = await supabase.auth.getUser();
+      setUser(data.user);
+      setLoading(false);
+    };
 
-    getUser()
+    getUser();
 
     const { data: listener } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        setUser(session?.user ?? null)
+      (_event: string, session: Session | null) => {
+        setUser(session?.user ?? null);
       }
-    )
+    );
 
     return () => {
-      listener.subscription.unsubscribe()
-    }
-  }, [])
+      listener.subscription.unsubscribe();
+    };
+  }, [supabase]);
 
   const handleLogout = async () => {
-    await supabase.auth.signOut()
-    router.push("/login")
-    router.refresh()
-  }
+    await supabase.auth.signOut();
+    router.push("/login");
+    router.refresh();
+  };
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50
@@ -49,10 +52,7 @@ export default function Navbar() {
 
       {loading ? null : user ? (
         <div className="flex items-center gap-4">
-          <Link
-            href="/profile"
-            className="hover:underline"
-          >
+          <Link href="/profile" className="hover:underline">
             Hồ sơ
           </Link>
 
@@ -76,5 +76,5 @@ export default function Navbar() {
         </Link>
       )}
     </nav>
-  )
+  );
 }

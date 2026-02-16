@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { supabase } from "app/lib/supabase"
+import { createSupabaseClient } from "app/lib/supabase";
 import { useRouter } from "next/navigation"
 
 export default function RegisterPage() {
@@ -16,13 +16,13 @@ export default function RegisterPage() {
 
     setLoading(true)
 
-    const { data, error } = await supabase.auth.signUp({
+    const { data, error } = await createSupabaseClient().auth.signUp({
       email,
       password,
     })
 
     if (data.user) {
-      await supabase.from("profiles").insert({
+      await createSupabaseClient().from("profiles").insert({
         id: data.user.id,
         full_name: "",
         avatar_url: "",

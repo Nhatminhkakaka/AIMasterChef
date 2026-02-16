@@ -51,7 +51,7 @@ export default function AIPage() {
       const {
         data: { user },
         error: userError,
-      } = await supabase.auth.getUser()
+      } = await createSupabaseClient().auth.getUser()
 
       if (userError || !user) {
         router.push("/login")
@@ -125,7 +125,7 @@ ${advancedPrompt}
           : "Món ăn không tên"
 
         // 🔥 INSERT CHUẨN RLS
-        const { error: insertError } = await supabase
+        const { error: insertError } = await createSupabaseClient()
           .from("lichsu")
           .insert({
             title: dishName,

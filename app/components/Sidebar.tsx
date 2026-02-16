@@ -1,40 +1,42 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { motion } from "framer-motion"
-import { useState, useEffect } from "react"
-import { supabase } from "app/lib/supabase"
-import { useRouter, usePathname } from "next/navigation"
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
+import { createSupabaseClient } from "app/lib/supabase";
+import { useRouter, usePathname } from "next/navigation";
+import { Session, User } from "@supabase/supabase-js";
 
 export default function Sidebar() {
-  const [open, setOpen] = useState(false)
-  const [user, setUser] = useState<any>(null)
-  const router = useRouter()
+  const [open, setOpen] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+  const router = useRouter();
+  const supabase = createSupabaseClient(); // ✅ tạo 1 instance duy nhất
 
   useEffect(() => {
     const getUser = async () => {
-      const { data } = await supabase.auth.getUser()
-      setUser(data.user)
-    }
+      const { data } = await supabase.auth.getUser();
+      setUser(data.user);
+    };
 
-    getUser()
+    getUser();
 
     const { data: listener } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        setUser(session?.user ?? null)
+      (_event: string, session: Session | null) => {
+        setUser(session?.user ?? null);
       }
-    )
+    );
 
     return () => {
-      listener.subscription.unsubscribe()
-    }
-  }, [])
+      listener.subscription.unsubscribe();
+    };
+  }, [supabase]);
 
   const handleLogout = async () => {
-    await supabase.auth.signOut()
-    router.push("/login")
-    router.refresh()
-  }
+    await supabase.auth.signOut();
+    router.push("/login");
+    router.refresh();
+  };
 
   return (
     <motion.aside
@@ -92,7 +94,7 @@ export default function Sidebar() {
         )}
       </div>
     </motion.aside>
-  )
+  );
 }
 
 function NavItem({
@@ -101,13 +103,13 @@ function NavItem({
   label,
   open,
 }: {
-  href: string
-  icon: string
-  label: string
-  open: boolean
+  href: string;
+  icon: string;
+  label: string;
+  open: boolean;
 }) {
-  const pathname = usePathname()
-  const isActive = pathname === href
+  const pathname = usePathname();
+  const isActive = pathname === href;
 
   return (
     <Link href={href}>
@@ -117,7 +119,6 @@ function NavItem({
           rounded-xl
           transition-all duration-200
           group cursor-pointer
-
           ${
             isActive
               ? "bg-neutral-200 dark:bg-neutral-800"
@@ -125,12 +126,10 @@ function NavItem({
           }
         `}
       >
-        {/* Active Indicator */}
         {isActive && (
           <div className="absolute left-0 top-0 h-full w-1 bg-yellow-500 rounded-r-full" />
         )}
 
-        {/* Icon */}
         <span
           className={`
             text-xl transition-transform duration-200
@@ -141,17 +140,12 @@ function NavItem({
           {icon}
         </span>
 
-        {/* Label */}
         {open && (
-          <span
-            className={`font-medium ${
-              isActive ? "text-yellow-500" : ""
-            }`}
-          >
+          <span className={`font-medium ${isActive ? "text-yellow-500" : ""}`}>
             {label}
           </span>
         )}
       </div>
     </Link>
-  )
+  );
 }
