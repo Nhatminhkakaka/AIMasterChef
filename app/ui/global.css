@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+input[type='number'] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+input[type='number']::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  border-radius: 12px;
+  transition: 0.3s;
+}
+
+.sidebar-item span {
+  opacity: 0;
+  transition: 0.3s;
+}
+
+div:hover .sidebar-item span {
+  opacity: 1;
+}
+
+.sidebar-item:hover {
+  background: linear-gradient(90deg, #ff7a18, #ff4b2b);
+  color: white;
+}
+
+.food-card {
+  background: white;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  transition: all 0.3s ease;
+}
+
+.food-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+.view-btn {
+  display: block;
+  margin: 10px auto 20px auto;
+  padding: 8px 20px;
+  border-radius: 25px;
+  background: linear-gradient(90deg, #ff4b2b, #ff416c);
+  color: white;
+}
