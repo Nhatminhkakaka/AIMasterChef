@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { supabase } from "@/app/lib/supabase"
+import { createSupabaseClient } from "app/lib/supabase";
 import { useRouter } from "next/navigation"
 
 interface FoodItem {
@@ -26,14 +26,14 @@ export default function SuggestPage() {
     const fetchHistory = async () => {
       const {
         data: { user },
-      } = await supabase.auth.getUser()
+      } = await createSupabaseClient().auth.getUser()
 
       if (!user) {
         router.push("/login")
         return
       }
 
-      const { data, error } = await supabase
+      const { data, error } = await createSupabaseClient()
         .from("lichsu")
         .select("id, title, content")
         .eq("user_id", user.id)
@@ -117,18 +117,18 @@ ${extraIngredients || "Không có"}
 
     const {
       data: { user },
-    } = await supabase.auth.getUser()
+    } = await createSupabaseClient().auth.getUser()
 
     if (!user) return
 
-    await supabase.from("lichsu").insert({
+    await createSupabaseClient().from("lichsu").insert({
       title: dishName,
       content: data.text,
       user_id: user.id,
     })
 
     // reload history để dropdown cập nhật ngay
-    const { data: newData } = await supabase
+    const { data: newData } = await createSupabaseClient()
       .from("lichsu")
       .select("id, title, content")
       .eq("user_id", user.id)

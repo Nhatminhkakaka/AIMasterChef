@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { useEffect, useState } from "react"
-import { supabase } from "app/lib/supabase"
+import { createSupabaseClient } from "@/lib/supabase";
 import { useRouter } from "next/navigation"
 
 export default function Navbar() {

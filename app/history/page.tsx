@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { supabase } from "@/app/lib/supabase"
+import { createSupabaseClient } from "app/lib/supabase";
 import { useRouter } from "next/navigation"
 
 interface FoodItem {
@@ -33,14 +33,14 @@ export default function HistoryPage() {
       const {
         data: { user },
         error: userError,
-      } = await supabase.auth.getUser()
+      } = await createSupabaseClient().auth.getUser()
 
       if (userError || !user) {
         router.push("/login")
         return
       }
 
-      const { data, error } = await supabase
+      const { data, error } = await createSupabaseClient()
         .from("lichsu")
         .select("*")
         .eq("user_id", user.id)
@@ -69,7 +69,7 @@ export default function HistoryPage() {
   // DELETE ONE
   // ===============================
   const deleteOne = async (id: string) => {
-    const { error } = await supabase
+    const { error } = await createSupabaseClient()
       .from("lichsu")
       .delete()
       .eq("id", id)
@@ -87,11 +87,11 @@ export default function HistoryPage() {
   const deleteAll = async () => {
     const {
       data: { user },
-    } = await supabase.auth.getUser()
+    } = await createSupabaseClient().auth.getUser()
 
     if (!user) return
 
-    const { error } = await supabase
+    const { error } = await createSupabaseClient()
       .from("lichsu")
       .delete()
       .eq("user_id", user.id)

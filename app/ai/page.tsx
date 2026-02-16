@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { supabase } from "@/app/lib/supabase"
+import { createSupabaseClient } from "app/lib/supabase";
 
 export default function AIPage() {
   const [ingredients, setIngredients] = useState("")
