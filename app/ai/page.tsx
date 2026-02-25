@@ -108,10 +108,8 @@ ${advancedPrompt}
       })
 
       if (!res.ok) {
-      const errorText = await res.text()
-      console.log("API error detail:", errorText)
-      throw new Error(errorText)
-    }
+        throw new Error("API Error")
+      }
 
       const data = await res.json()
 
