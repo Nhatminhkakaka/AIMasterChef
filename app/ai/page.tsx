@@ -98,11 +98,7 @@ ${advancedPrompt}
 2) Không viết mô tả phía trên tiêu đề.
 3) Trình bày markdown chuẩn.
 4) Cố gắng sử dụng nguyên liệu đã cho, nhưng có thể thêm 1-2 nguyên liệu nếu cần thiết để món ăn ngon hơn.
-5) Nếu không thể tạo món ăn ngon từ nguyên liệu đã cho, hãy tạo món ăn đơn giản nhất có thể.
-6) KHÔNG ĐƯỢC TẠO RA MÓN ĂN KHÔNG THỰC TẾ, PHẢI LÀ MÓN ĂN CÓ THẬT VÀ CÓ THỂ NẤU ĐƯỢC.
-7) KHÔNG ĐƯỢC TẠO RA MÓN ĂN CHỈ DÙNG CHO TRẺ EMHOẶC LÀ NGƯỜI ĂN KIÊNG, PHẢI LÀ MÓN ĂN MỌI NGƯỜI ĐỀU CÓ THỂ THƯỞNG THỨC.
-8) KHÔNG ĐƯỢC TẠO RA MÓN ĂN CHỈ CÓ TÔI MỚI BIẾT, PHẢI LÀ MÓN ĂN PHỔ BIẾN MÀ NHIỀU NGƯỜI BIẾT ĐẾN.
-9) NẾU KHÔNG THỂ TẠO TỪ NHỮNG MÓN ĂN ĐÃ CÓ, HÃY LÀM MÓN NHƯ BÌNH THƯỜNG VÀ CHO BIẾT NHỮNG NGUYÊN LIỆU CÒN THIẾU VÀ GIÁ TIỀN TRUNG BÌNH CỦA NHỮNG NGUYÊN LIỆU CÒN THIẾU ẤY.
+5) NẾU KHÔNG THỂ TẠO TỪ NHỮNG MÓN ĂN ĐÃ CÓ, HÃY LÀM MÓN NHƯ BÌNH THƯỜNG VÀ CHO BIẾT NHỮNG NGUYÊN LIỆU CÒN THIẾU VÀ GIÁ TIỀN TRUNG BÌNH CỦA NHỮNG NGUYÊN LIỆU CÒN THIẾU ẤY.
 `,
         }),
       })
