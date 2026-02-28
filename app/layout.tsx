@@ -46,7 +46,7 @@ export default function RootLayout({
           {/* ===== WATERMARK ===== */}
           <div className="fixed bottom-6 right-8 z-[9999] pointer-events-none select-none">
             <p className="text-lg md:text-xl text-gray-400/70 dark:text-gray-500/70 font-medium tracking-wide">
-              nhnm - 2026
+              kmd - 2026
             </p>
           </div>
 
