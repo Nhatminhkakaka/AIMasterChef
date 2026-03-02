@@ -64,6 +64,7 @@ export default function Sidebar() {
         <NavItem href="/ai" icon="🤖" label="AI" open={open} />
         <NavItem href="/history" icon="📜" label="Lịch sử" open={open} />
         <NavItem href="/suggest" icon="⭐" label="Gợi ý" open={open} />
+        <NavItem href="/specialty" icon="🗺️" label="Đặc sản" open={open} />
         <NavItem href="/settings" icon="⚙️" label="Cài đặt" open={open} />
       </div>
 
