@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
 import { motion } from "framer-motion"
 import { provinces } from "app/lib/provinces"
 
@@ -11,8 +11,35 @@ interface SpecialtyExplorerProps {
 export default function SpecialtyExplorer({ onProvinceSelect }: SpecialtyExplorerProps) {
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedRegion, setSelectedRegion] = useState<string | null>(null)
+  const [favorites, setFavorites] = useState<string[]>([])
+  const [toast, setToast] = useState<{ show: boolean; message: string }>({ show: false, message: "" })
 
   const regions = ["Miền Bắc", "Miền Trung", "Miền Nam", "Hải Đảo"]
+
+  // load favorites from localStorage once
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem("favorites")
+      if (stored) setFavorites(JSON.parse(stored))
+    } catch {}
+  }, [])
+
+  const saveFavorites = (list: string[]) => {
+    setFavorites(list)
+    localStorage.setItem("favorites", JSON.stringify(list))
+  }
+
+  const toggleFavorite = (id: string) => {
+    const exists = favorites.includes(id)
+    const updated = exists ? favorites.filter((x) => x !== id) : [...favorites, id]
+    saveFavorites(updated)
+    showToast(exists ? "Đã bỏ yêu thích" : "Đã thêm vào yêu thích")
+  }
+
+  const showToast = (msg: string) => {
+    setToast({ show: true, message: msg })
+    setTimeout(() => setToast({ show: false, message: "" }), 2000)
+  }
 
   const filteredProvinces = useMemo(() => {
     const term = searchTerm.toLowerCase()
@@ -26,7 +53,7 @@ export default function SpecialtyExplorer({ onProvinceSelect }: SpecialtyExplore
 
       return matchSearch && matchRegion
     })
-  }, [searchTerm, selectedRegion])
+  }, [searchTerm, selectedRegion, favorites])
 
   return (
     <motion.div
@@ -51,6 +78,30 @@ export default function SpecialtyExplorer({ onProvinceSelect }: SpecialtyExplore
                      transition"
         />
         <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">🔍</div>
+
+        {/* suggestion dropdown */}
+        {searchTerm && (
+          <ul className="absolute z-10 w-full mt-1 bg-white dark:bg-neutral-900 border border-gray-300 dark:border-neutral-700 rounded-md max-h-40 overflow-auto">
+            {provinces
+              .filter((p) =>
+                p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                p.shortName.toLowerCase().includes(searchTerm.toLowerCase())
+              )
+              .slice(0, 5)
+              .map((p) => (
+                <li
+                  key={p.id}
+                  onClick={() => {
+                    setSearchTerm(p.name)
+                    onProvinceSelect?.(p.id)
+                  }}
+                  className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-neutral-800 cursor-pointer"
+                >
+                  {p.name}
+                </li>
+              ))}
+          </ul>
+        )}
       </div>
 
       {/* Region Filter Buttons */}
@@ -83,32 +134,47 @@ export default function SpecialtyExplorer({ onProvinceSelect }: SpecialtyExplore
       {filteredProvinces.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {filteredProvinces.map((province, idx) => (
-            <motion.button
+            <motion.div
               key={province.id}
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: idx * 0.05 }}
-              whileHover={{ scale: 1.05, y: -4 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => onProvinceSelect?.(province.id)}
-              className="text-left p-3 bg-white dark:bg-neutral-900 
-                         border-2 border-gray-200 dark:border-neutral-800
-                         rounded-lg hover:border-orange-400 dark:hover:border-orange-300
-                         transition cursor-pointer"
+              className="relative"
             >
-              <p className="font-bold text-gray-800 dark:text-gray-200">{province.name}</p>
-              <p className="text-xs text-gray-500 dark:text-gray-400">{province.shortName}</p>
-              <div className="flex items-center gap-2 mt-2">
-                <span className="text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-2 py-1 rounded">
-                  {province.region}
-                </span>
-                {province.region === "Hải Đảo" && (
-                  <span className="text-xs bg-teal-100 dark:bg-teal-900/30 text-teal-700 dark:text-teal-300 px-2 py-1 rounded">
-                    🏝️ Quần Đảo
+              <motion.button
+                whileHover={{ scale: 1.05, y: -4 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => onProvinceSelect?.(province.id)}
+                className="w-full text-left p-3 bg-white dark:bg-neutral-900 
+                           border-2 border-gray-200 dark:border-neutral-800
+                           rounded-lg hover:border-orange-400 dark:hover:border-orange-300
+                           transition cursor-pointer"
+              >
+                <p className="font-bold text-gray-800 dark:text-gray-200">{province.name}</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">{province.shortName}</p>
+                <div className="flex items-center gap-2 mt-2">
+                  <span className="text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-2 py-1 rounded">
+                    {province.region}
                   </span>
-                )}
-              </div>
-            </motion.button>
+                  {province.region === "Hải Đảo" && (
+                    <span className="text-xs bg-teal-100 dark:bg-teal-900/30 text-teal-700 dark:text-teal-300 px-2 py-1 rounded">
+                      🏝️ Quần Đảo
+                    </span>
+                  )}
+                </div>
+              </motion.button>
+
+              {/* favorite star */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation()
+                  toggleFavorite(province.id)
+                }}
+                className="absolute top-2 right-2 text-xl"
+              >
+                {favorites.includes(province.id) ? "⭐" : "☆"}
+              </button>
+            </motion.div>
           ))}
         </div>
       ) : (
@@ -121,6 +187,13 @@ export default function SpecialtyExplorer({ onProvinceSelect }: SpecialtyExplore
           <p>Không tìm thấy kết quả</p>
           <p className="text-xs">Thử tìm kiếm từ khác</p>
         </motion.div>
+      )}
+
+      {/* toast message */}
+      {toast.show && (
+        <div className="fixed bottom-6 right-6 bg-black/80 text-white px-4 py-2 rounded-lg shadow-lg">
+          {toast.message}
+        </div>
       )}
     </motion.div>
   )
