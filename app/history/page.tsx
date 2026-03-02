@@ -304,3 +304,6 @@ export default function HistoryPage() {
         </motion.div>
       )}
     </motion.div>
+  )
+}
+
