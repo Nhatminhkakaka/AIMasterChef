@@ -3,12 +3,14 @@
 import { useState, useMemo, useEffect } from "react"
 import { motion } from "framer-motion"
 import { provinces } from "app/lib/provinces"
+import { createSupabaseClient } from "app/lib/supabase"
 
 interface SpecialtyExplorerProps {
   onProvinceSelect?: (provinceId: string) => void
+  userId?: string | null
 }
 
-export default function SpecialtyExplorer({ onProvinceSelect }: SpecialtyExplorerProps) {
+export default function SpecialtyExplorer({ onProvinceSelect, userId }: SpecialtyExplorerProps) {
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedRegion, setSelectedRegion] = useState<string | null>(null)
   const [favorites, setFavorites] = useState<string[]>([])
@@ -16,24 +18,41 @@ export default function SpecialtyExplorer({ onProvinceSelect }: SpecialtyExplore
 
   const regions = ["Miền Bắc", "Miền Trung", "Miền Nam", "Hải Đảo"]
 
-  // load favorites from localStorage once
+  const supabase = createSupabaseClient()
+
+  // load favorites from Supabase when userId becomes available
   useEffect(() => {
-    try {
-      const stored = localStorage.getItem("favorites")
-      if (stored) setFavorites(JSON.parse(stored))
-    } catch {}
-  }, [])
+    if (!userId) return
+    const fetch = async () => {
+      const { data, error } = await supabase
+        .from("favorites")
+        .select("province_id")
+        .eq("user_id", userId)
+      if (!error && data) {
+        setFavorites(data.map((r: any) => r.province_id))
+      }
+    }
+    fetch()
+  }, [userId])
 
-  const saveFavorites = (list: string[]) => {
-    setFavorites(list)
-    localStorage.setItem("favorites", JSON.stringify(list))
-  }
-
-  const toggleFavorite = (id: string) => {
+  const toggleFavorite = async (id: string) => {
+    if (!userId) return
     const exists = favorites.includes(id)
-    const updated = exists ? favorites.filter((x) => x !== id) : [...favorites, id]
-    saveFavorites(updated)
-    showToast(exists ? "Đã bỏ yêu thích" : "Đã thêm vào yêu thích")
+    if (exists) {
+      await supabase
+        .from("favorites")
+        .delete()
+        .eq("user_id", userId)
+        .eq("province_id", id)
+      setFavorites(favorites.filter((x) => x !== id))
+      showToast("Đã bỏ yêu thích")
+    } else {
+      await supabase
+        .from("favorites")
+        .insert({ user_id: userId, province_id: id })
+      setFavorites([...favorites, id])
+      showToast("Đã thêm vào yêu thích")
+    }
   }
 
   const showToast = (msg: string) => {
@@ -43,7 +62,7 @@ export default function SpecialtyExplorer({ onProvinceSelect }: SpecialtyExplore
 
   const filteredProvinces = useMemo(() => {
     const term = searchTerm.toLowerCase()
-    return provinces.filter((province) => {
+    let list = provinces.filter((province) => {
       const matchSearch =
         province.name.toLowerCase().includes(term) ||
         province.shortName.toLowerCase().includes(term) ||
@@ -53,6 +72,20 @@ export default function SpecialtyExplorer({ onProvinceSelect }: SpecialtyExplore
 
       return matchSearch && matchRegion
     })
+
+    // sort favorites to top
+    if (favorites.length) {
+      list.sort((a, b) => {
+        const ai = favorites.indexOf(a.id)
+        const bi = favorites.indexOf(b.id)
+        if (ai === -1 && bi === -1) return 0
+        if (ai === -1) return 1
+        if (bi === -1) return -1
+        return ai - bi
+      })
+    }
+
+    return list
   }, [searchTerm, selectedRegion, favorites])
 
   return (
@@ -127,6 +160,28 @@ export default function SpecialtyExplorer({ onProvinceSelect }: SpecialtyExplore
       <div className="text-sm text-gray-600 dark:text-gray-400 font-medium">
         📊 Tìm thấy <span className="text-orange-500 dark:text-orange-400 font-bold">{filteredProvinces.length}</span> kết quả
       </div>
+
+      {/* Favorites list */}
+      {favorites.length > 0 && (
+        <div className="">
+          <h3 className="font-semibold text-gray-800 dark:text-gray-200 mb-2">❤️ Danh sách yêu thích</h3>
+          <div className="flex flex-wrap gap-2 mb-4">
+            {favorites.map((id) => {
+              const p = provinces.find((x) => x.id === id)
+              if (!p) return null
+              return (
+                <button
+                  key={id}
+                  onClick={() => onProvinceSelect?.(id)}
+                  className="px-3 py-1 bg-orange-100 dark:bg-orange-800 rounded-full text-sm text-orange-700 dark:text-orange-300 hover:bg-orange-200 dark:hover:bg-orange-700 transition"
+                >
+                  {p.name}
+                </button>
+              )
+            })}
+          </div>
+        </div>
+      )}
 
 
 

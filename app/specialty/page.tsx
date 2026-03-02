@@ -12,6 +12,7 @@ export default function SpecialtyPage() {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(true)
   const [selectedProvinceId, setSelectedProvinceId] = useState<string | null>(null)
+  const [userId, setUserId] = useState<string | null>(null)
   const selectedProvince = provinces.find((p) => p.id === selectedProvinceId) || null
 
   // ===============================
@@ -28,21 +29,12 @@ export default function SpecialtyPage() {
         return
       }
 
+      setUserId(user.id)
       setIsLoading(false)
     }
 
     checkAuth()
   }, [router])
-
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <motion.div animate={{ rotate: 360 }} transition={{ duration: 2, repeat: Infinity }}>
-          <div className="text-5xl">🍽️</div>
-        </motion.div>
-      </div>
-    )
-  }
 
   return (
     <motion.div
@@ -119,7 +111,7 @@ export default function SpecialtyPage() {
           <p className="text-gray-600 dark:text-gray-400 mb-4">
             Tìm kiếm theo tên tỉnh, thành phố hoặc tên đặc sản
           </p>
-          <SpecialtyExplorer onProvinceSelect={(id) => setSelectedProvinceId(id)} />
+          <SpecialtyExplorer userId={userId} onProvinceSelect={(id) => setSelectedProvinceId(id)} />
         </motion.div>
 
         {/* RIGHT SIDE - DETAILS */}
