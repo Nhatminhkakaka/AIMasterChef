@@ -3,6 +3,7 @@ import Sidebar from "./components/Sidebar"
 import Navbar from "./components/Navbar"
 import { ThemeProvider } from "next-themes"
 import PageTransition from "./components/PageTransition"
+import ToastProvider from "./components/ToastProvider"
 
 export default function RootLayout({
   children,
@@ -37,9 +38,9 @@ export default function RootLayout({
                          p-10
                          transition-all duration-300"
             >
-              <PageTransition>
-                {children}
-              </PageTransition>
+              <ToastProvider>
+                <PageTransition>{children}</PageTransition>
+              </ToastProvider>
             </main>
           </div>
 

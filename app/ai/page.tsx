@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { createSupabaseClient } from "app/lib/supabase";
+import { useToast } from "app/components/ToastProvider"
 
 export default function AIPage() {
   const [ingredients, setIngredients] = useState("")
@@ -14,6 +15,7 @@ export default function AIPage() {
 
   const animationRef = useRef<number | null>(null)
   const router = useRouter()
+  const { push } = useToast()
 
   // ===============================
   // Progress animation
@@ -44,7 +46,10 @@ export default function AIPage() {
   // HANDLE GENERATE
   // ===============================
   const handleGenerate = async () => {
-    if (!ingredients.trim()) return
+    if (!ingredients.trim()) {
+      push("Vui lòng nhập nguyên liệu")
+      return
+    }
 
     try {
       // 🔥 LẤY USER ĐÚNG CÁCH
@@ -146,6 +151,7 @@ ${advancedPrompt}
       console.error(err)
       setLoading(false)
       setResult("❌ Đã xảy ra lỗi khi tạo món ăn.")
+      push("Lỗi khi kết nối AI")
     }
   }
 
@@ -174,7 +180,7 @@ ${advancedPrompt}
 
           <button
             onClick={handleGenerate}
-            disabled={loading}
+            disabled={loading || !ingredients.trim()}
             className="px-8 py-3 rounded-full bg-gradient-to-r from-orange-500 to-pink-500 text-white font-semibold shadow-lg hover:scale-105 transition disabled:opacity-50"
           >
             {loading ? "AI đang nấu..." : "Tạo món ăn"}
@@ -182,8 +188,20 @@ ${advancedPrompt}
         </div>
 
         {result && (
-          <div className="mt-8 whitespace-pre-line p-6 rounded-xl bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700">
+          <div className="mt-8 whitespace-pre-line p-6 rounded-xl bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 relative">
             {result}
+            <button
+              onClick={() => {
+                navigator.clipboard.writeText(result)
+                push("Đã sao chép kết quả")
+              }}
+              className="absolute top-2 right-2 text-xs text-orange-600 hover:underline"
+            >Sao chép</button>
+            <div className="mt-4">
+              <Link href="/history" className="text-sm text-blue-600 dark:text-blue-400 hover:underline">
+                Xem lại lịch sử
+              </Link>
+            </div>
           </div>
         )}
       </div>

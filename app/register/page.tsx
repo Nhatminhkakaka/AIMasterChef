@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { createSupabaseClient } from "app/lib/supabase";
 import { useRouter } from "next/navigation"
+import { useToast } from "app/components/ToastProvider"
 
 export default function RegisterPage() {
   const router = useRouter()
@@ -10,9 +11,24 @@ export default function RegisterPage() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
+  const { push } = useToast()
 
   const handleRegister = async () => {
-    if (!email || !password) return
+    if (!email || !password) {
+      push("Email và mật khẩu không được để trống")
+      return
+    }
+
+    const emailRegex = /^[^@\s]+@[^@\s]+\.[^@\s]+$/
+    if (!emailRegex.test(email)) {
+      push("Email không hợp lệ")
+      return
+    }
+
+    if (password.length < 6) {
+      push("Mật khẩu phải ít nhất 6 ký tự")
+      return
+    }
 
     setLoading(true)
 
@@ -32,10 +48,10 @@ export default function RegisterPage() {
     setLoading(false)
 
     if (!error) {
-      alert("Đăng ký thành công! Hãy đăng nhập.")
+      push("Đăng ký thành công! Hãy đăng nhập.")
       router.push("/login")
     } else {
-      alert(error.message)
+      push(error.message)
     }
   }
 

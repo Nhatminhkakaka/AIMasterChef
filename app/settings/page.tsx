@@ -4,14 +4,19 @@ import { useEffect, useState } from "react"
 import { createSupabaseClient } from "app/lib/supabase";
 import { useRouter } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
+import { useToast } from "app/components/ToastProvider"
 
 export default function SettingsPage() {
   const router = useRouter()
+
+  const { push } = useToast()
 
   const [fullName, setFullName] = useState("")
   const [avatarUrl, setAvatarUrl] = useState("")
   const [openSection, setOpenSection] = useState<string | null>(null)
   const [theme, setTheme] = useState("light")
+  const [accent, setAccent] = useState<string>("#ff7a59")
+  const [notifications, setNotifications] = useState(true)
 
   // ===============================
   // LOAD PROFILE + THEME
@@ -36,6 +41,8 @@ export default function SettingsPage() {
       if (data) {
         setFullName(data.full_name || "")
         setAvatarUrl(data.avatar_url || "")
+        setAccent(data.accent_color || "#ff7a59")
+        setNotifications(data.notifications ?? true)
       }
     }
 
@@ -66,10 +73,13 @@ export default function SettingsPage() {
       .update({
         full_name: fullName,
         avatar_url: avatarUrl,
+        accent_color: accent,
+        notifications,
       })
       .eq("id", user.id)
 
     setOpenSection(null)
+    push("Đã lưu hồ sơ")
   }
 
   // ===============================
@@ -162,6 +172,13 @@ export default function SettingsPage() {
                   className="w-full p-3 mb-4 rounded-lg bg-neutral-100 dark:bg-neutral-800"
                 />
 
+                {avatarUrl && (
+                  <div className="mb-4">
+                    <p className="text-sm text-gray-500 mb-2">Xem trước:</p>
+                    <img src={avatarUrl} className="w-24 h-24 rounded-full object-cover" />
+                  </div>
+                )}
+
                 <button
                   onClick={handleSaveProfile}
                   className="px-6 py-2 rounded-full bg-black text-white dark:bg-white dark:text-black"
@@ -219,6 +236,17 @@ export default function SettingsPage() {
                               peer-checked:translate-x-6"
                   ></div>
                 </label>
+                <div className="ml-4 flex items-center gap-3">
+                  <input type="color" value={accent} onChange={(e) => setAccent(e.target.value)} className="w-10 h-10 p-0 border-0" />
+                  <label className="text-sm opacity-80">Accent</label>
+                </div>
+                <div className="ml-6 flex items-center gap-3">
+                  <label className="text-sm">Thông báo</label>
+                  <input type="checkbox" checked={notifications} onChange={() => setNotifications(!notifications)} />
+                </div>
+                <div className="ml-auto">
+                  <button onClick={() => { handleSaveProfile(); push('Lưu cài đặt giao diện'); }} className="px-4 py-2 bg-orange-500 text-white rounded-full">Lưu cài đặt</button>
+                </div>
               </motion.div>
             )}
           </AnimatePresence>

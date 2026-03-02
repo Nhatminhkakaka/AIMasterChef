@@ -707,6 +707,7 @@ export const provinces: Province[] = [
     centerX: 552,
     centerY: 795,
   },
+  // mapping will override specialties data, see below
   {
     id: "kien-giang",
     name: "Kiên Giang",
@@ -723,6 +724,7 @@ export const provinces: Province[] = [
     centerX: 532,
     centerY: 815,
   },
+// ... provinces array continues ...
   {
     id: "ca-mau",
     name: "Cà Mau",
@@ -839,6 +841,7 @@ export const provinces: Province[] = [
     centerX: 452,
     centerY: 142,
   },
+// the export continues and then we'll insert mapping at end
   {
     id: "nam-dinh",
     name: "Nam Định",
@@ -1008,3 +1011,364 @@ export const provinces: Province[] = [
     centerY: 805,
   },
 ]
+
+// user‑provided specialty updates – the raw provinces array stays as-is above
+const customSpecialties: Record<string, Specialty[]> = {
+  "ha-noi": [
+    { name: "Phở Hà Nội", description: "" },
+    { name: "Bún chả", description: "" },
+    { name: "Chả cá Lã Vọng", description: "" },
+    { name: "Bún thang", description: "" },
+    { name: "Bánh cuốn", description: "" },
+  ],
+  "ha-giang": [
+    { name: "Thắng cố", description: "" },
+    { name: "Bánh cuốn nóng (đặc sản vùng cao)", description: "" },
+    { name: "Lợn cắp nách nướng / xào", description: "" },
+    { name: "Xôi ngũ sắc", description: "" },
+  ],
+  "cao-bang": [
+    { name: "Bánh cuốn Cao Bằng", description: "" },
+    { name: "Cá tiến vua nướng/khô", description: "" },
+    { name: "Phở chua", description: "" },
+    { name: "Gỏi cá, thắng cố vùng cao", description: "" },
+  ],
+  "lao-cai": [
+    { name: "Thắng cố (phiên bản vùng Tây Bắc)", description: "" },
+    { name: "Cơm lam", description: "" },
+    { name: "Thịt trâu gác bếp", description: "" },
+    { name: "Xôi tím/ẩm thực dân tộc", description: "" },
+  ],
+  "yen-bai": [
+    { name: "Thịt lợn bản nướng (lợn cắp nách)", description: "" },
+    { name: "Xôi ngũ sắc", description: "" },
+    { name: "Cơm lam", description: "" },
+    { name: "Cá suối nướng", description: "" },
+  ],
+  "tuyen-quang": [
+    { name: "Gà đồi, gà bản nướng", description: "" },
+    { name: "Xôi ngũ sắc", description: "" },
+    { name: "Bánh gai Tứ Kỳ (phiên bản địa phương)", description: "" },
+    { name: "Măng đắng, món rừng", description: "" },
+  ],
+  "bac-kan": [
+    { name: "Cá nướng Ba Bể", description: "" },
+    { name: "Thịt lợn gác bếp", description: "" },
+    { name: "Các món từ măng rừng", description: "" },
+  ],
+  "phu-tho": [
+    { name: "Bún chả Phú Thọ / bún rạm", description: "" },
+    { name: "Xôi vò", description: "" },
+    { name: "Bánh chưng, bánh dày Hùng Vương (ẩm thực lễ hội)", description: "" },
+  ],
+  "vinh-phuc": [
+    { name: "Bún chả Hùng (địa phương)", description: "" },
+    { name: "Bánh cuốn Thanh Trì (phiên bản lan rộng)", description: "" },
+    { name: "Cam Vĩnh Phúc (trái cây đặc sản)", description: "" },
+  ],
+  "thai-nguyen": [
+    { name: "Chè Thái Nguyên (trà)", description: "" },
+    { name: "Bún đậu mắm tôm kiểu địa phương", description: "" },
+    { name: "Bánh chưng, bánh tẻ đặc sản", description: "" },
+  ],
+  "bac-giang": [
+    { name: "Gỏi cá mè (Lục Ngạn)", description: "" },
+    { name: "Bánh đa Kế (bánh đa nem/khô)", description: "" },
+    { name: "Vải thiều (nổi tiếng vùng Lục Ngạn)", description: "" },
+  ],
+  "bac-ninh": [
+    { name: "Xôi chim", description: "" },
+    { name: "Bánh đa Kế (phiên bản)", description: "" },
+    { name: "Bánh cuốn, nem thính địa phương", description: "" },
+  ],
+  "hung-yen": [
+    { name: "Bún thang lươn (một số nơi)", description: "" },
+    { name: "Bánh tẻ, kẹo lạc, trái cây (nhãn)", description: "" },
+    { name: "Nhãn lồng Hưng Yên", description: "" },
+  ],
+  "hai-duong": [
+    { name: "Bánh đậu xanh Hải Dương", description: "" },
+    { name: "Bún cá rô đồng", description: "" },
+    { name: "Cơm niêu, cua đồng các món địa phương", description: "" },
+  ],
+  "quang-ninh": [
+    { name: "Sá sùng, mực, hải sản Hạ Long", description: "" },
+    { name: "Chả mực Hạ Long", description: "" },
+    { name: "Bánh gật gù, xôi chả mực", description: "" },
+  ],
+  "hai-phong": [
+    { name: "Bánh đa cua", description: "" },
+    { name: "Nem cua bể", description: "" },
+    { name: "Hải sản tươi (sò, ốc)", description: "" },
+    { name: "Bún tôm và bánh mì hấp dẫn địa phương", description: "" },
+  ],
+  "thai-binh": [
+    { name: "Bún cá rô đồng", description: "" },
+    { name: "Bánh cáy", description: "" },
+    { name: "Chè và các món từ lúa gạo địa phương", description: "" },
+  ],
+  "nam-dinh": [
+    { name: "Phở Nam Định (phiên bản)", description: "" },
+    { name: "Bún chả, nem chả Nam Định", description: "" },
+    { name: "Cháo lươn (nhiều nơi)", description: "" },
+    { name: "Bánh gai, bánh cuốn", description: "" },
+  ],
+  "ninh-binh": [
+    { name: "Dê núi Ninh Bình (dê tái, dê nướng)", description: "" },
+    { name: "Cơm cháy Ninh Bình", description: "" },
+    { name: "Tam cốc/đặc sản cá sông địa phương", description: "" },
+  ],
+  "ha-nam": [
+    { name: "Cá kho làng Vũ Đại (đặc sản nổi tiếng, phiên bản địa phương)", description: "" },
+    { name: "Bánh cuốn, cốm, các món đồng quê", description: "" },
+  ],
+  "hoa-binh": [
+    { name: "Thịt trâu gác bếp", description: "" },
+    { name: "Cá suối nướng", description: "" },
+    { name: "Xôi nếp (ẩm thực dân tộc)", description: "" },
+  ],
+  "thanh-hoa": [
+    { name: "Nem chua Thanh Hóa", description: "" },
+    { name: "Bánh cuốn, bánh răng bừa (đặc sản vùng)", description: "" },
+    { name: "Cá rô kho, mắm tép chưng", description: "" },
+  ],
+  "nghe-an": [
+    { name: "Cháo lươn Nghệ An", description: "" },
+    { name: "Bánh đa cá rô, bánh mướt", description: "" },
+    { name: "Nem chua Thanh Chương", description: "" },
+  ],
+  "ha-tinh": [
+    { name: "Bánh đa nem, bánh bèo đặc trưng", description: "" },
+    { name: "Cháo canh (một số vùng)", description: "" },
+    { name: "Chả lá, hải sản sông", description: "" },
+  ],
+  "quang-binh": [
+    { name: "Bánh xèo Quảng Bình / Quảng Trị (phiên bản miền Trung)", description: "" },
+    { name: "Cháo canh", description: "" },
+    { name: "Mỳ Quảng (phiên bản miền Trung)", description: "" },
+    { name: "Hải sản ven biển", description: "" },
+  ],
+  "quang-tri": [
+    { name: "Bánh ít lá gai, cháo canh", description: "" },
+    { name: "Bánh khoái Quảng Trị/Quảng Nam kiểu địa phương", description: "" },
+    { name: "Hải sản vùng biển", description: "" },
+  ],
+  "thua-thien-hue": [
+    { name: "Bún bò Huế", description: "" },
+    { name: "Cơm hến", description: "" },
+    { name: "Bánh bột lọc, bún hến", description: "" },
+    { name: "Bánh khoái Huế", description: "" },
+  ],
+  "da-nang": [
+    { name: "Mỳ Quảng", description: "" },
+    { name: "Bún chả cá Đà Nẵng", description: "" },
+    { name: "Bánh tráng cuốn thịt heo (Hội An/Đà Nẵng)", description: "" },
+    { name: "Hải sản biển", description: "" },
+  ],
+  "quang-nam": [
+    { name: "Cao lầu (Hội An)", description: "" },
+    { name: "Mỳ Quảng (phổ biến khắp tỉnh)", description: "" },
+    { name: "Bánh bao, bánh vạc (món Hội An)", description: "" },
+    { name: "Bánh đập, ốc biển", description: "" },
+  ],
+  "quang-ngai": [
+    { name: "Mỳ Quảng Quảng Ngãi (phiên bản)", description: "" },
+    { name: "Bánh tráng cuốn thịt heo (địa phương)", description: "" },
+    { name: "Gỏi cá Trà Bồng", description: "" },
+  ],
+  "binh-dinh": [
+    { name: "Bánh xèo (Bình Định/Quy Nhơn)", description: "" },
+    { name: "Bún chả cá Quy Nhơn", description: "" },
+    { name: "Bánh ít lá gai, nem chua", description: "" },
+  ],
+  "phu-yen": [
+    { name: "Cá ngừ đại dương (đặc sản Tuy Hòa)", description: "" },
+    { name: "Bánh hỏi cháo lòng (một số vùng)", description: "" },
+    { name: "Các món hải sắn", description: "" },
+  ],
+  "khanh-hoa": [
+    { name: "Nem Ninh Hòa", description: "" },
+    { name: "Bún sứa Nha Trang", description: "" },
+    { name: "Hải sản (mực, tôm, cá)", description: "" },
+    { name: "Bánh căn, bánh xèo kiểu Nha Trang", description: "" },
+  ],
+  "ninh-thuan": [
+    { name: "Nho Ninh Thuận (trái cây đặc sản)", description: "" },
+    { name: "Bún mắm nêm kiểu miền Trung", description: "" },
+    { name: "Các món từ hải sản ven biển", description: "" },
+  ],
+  "binh-thuan": [
+    { name: "Bánh căn, bánh xèo Phan Thiết", description: "" },
+    { name: "Hải sản (tôm, mực)", description: "" },
+    { name: "Mắm ruốc, muối cá (đặc sản vùng biển)", description: "" },
+  ],
+  "kon-tum": [
+    { name: "Gà nướng mắc kén / rượu cần", description: "" },
+    { name: "Cơm lam", description: "" },
+    { name: "Thịt trâu gác bếp, măng rừng", description: "" },
+  ],
+  "gia-lai": [
+    { name: "Cơm lam", description: "" },
+    { name: "Gà nướng, rượu cần", description: "" },
+    { name: "Các món từ măng rừng, cà phê Buôn Ma Thuột (liên vùng)", description: "" },
+  ],
+  "dak-lak": [
+    { name: "Cà phê Buôn Ma Thuột (nổi tiếng cả quốc)", description: "" },
+    { name: "Bò một nắng, thịt trâu gác bếp", description: "" },
+    { name: "Cơm lam", description: "" },
+  ],
+  "dak-nong": [
+    { name: "Cá suối, gà nướng dân tộc", description: "" },
+    { name: "Cà phê, các sản phẩm nông nghiệp miền cao nguyên", description: "" },
+  ],
+  "lam-dong": [
+    { name: "Bánh căn Đà Lạt / bánh cuốn Lâm Đồng", description: "" },
+    { name: "Lẩu gà lá é (Đà Lạt/Đà Lạt vùng Lâm Đồng)", description: "" },
+    { name: "Rau, hoa, trà Ô long (đặc sản Đà Lạt)", description: "" },
+  ],
+  "binh-phuoc": [
+    { name: "Hạt điều (sản phẩm nông nghiệp)", description: "" },
+    { name: "Các món gỏi, nướng dân tộc", description: "" },
+    { name: "Măng rừng, đặc sản rừng", description: "" },
+  ],
+  "binh-duong": [
+    { name: "Bánh mì Sài Gòn (phiên bản địa phương)", description: "" },
+    { name: "Các món ăn công nghiệp/đa vùng (vùng công nghiệp)", description: "" },
+    { name: "Lẩu, bún, món ăn nhanh địa phương", description: "" },
+  ],
+  "dong-nai": [
+    { name: "Bò nướng, cơm lam (một số vùng)", description: "" },
+    { name: "Cá sông Đồng Nai chế biến (cá kho, cá chiên)", description: "" },
+    { name: "Món ăn truyền thống miền Đông Nam Bộ", description: "" },
+  ],
+  "ba-ria-vung-tau": [
+    { name: "Hải sản Vũng Tàu (ghẹ, tôm, mực)", description: "" },
+    { name: "Bánh khọt Vũng Tàu", description: "" },
+    { name: "Lẩu cá đuối (địa phương)", description: "" },
+  ],
+  "ho-chi-minh": [
+    { name: "Cơm tấm Sài Gòn", description: "" },
+    { name: "Bánh mì Sài Gòn (bánh mì thịt)", description: "" },
+    { name: "Hủ tiếu Nam Vang/Bánh tráng trộn", description: "" },
+    { name: "Các món Sài Gòn đa vùng (hải sản, mì, bún)", description: "" },
+  ],
+  "long-an": [
+    { name: "Cháo lòng miền Tây", description: "" },
+    { name: "Bánh xèo, hủ tiếu (phổ biến khu vực)", description: "" },
+    { name: "Cá đồng, đặc sản đồng bằng", description: "" },
+  ],
+  "tien-giang": [
+    { name: "Bánh cống, hủ tiếu Mỹ Tho", description: "" },
+    { name: "Bưởi Năm Roi (trái cây đặc sản)", description: "" },
+    { name: "Lẩu mắm, cá lóc nướng trui", description: "" },
+  ],
+  "ben-tre": [
+    { name: "Dừa Bến Tre (các món từ dừa)", description: "" },
+    { name: "Bánh xèo miền Tây", description: "" },
+    { name: "Bánh tét, các đặc sản làm từ dừa", description: "" },
+  ],
+  "tra-vinh": [
+    { name: "Bánh tét Trà Vinh (phiên bản địa phương)", description: "" },
+    { name: "Hủ tiếu, bún nước miền Tây", description: "" },
+    { name: "Hải sản sông nước", description: "" },
+  ],
+  "vinh-long": [
+    { name: "Cá lóc nướng trui, lẩu mắm miền Tây", description: "" },
+    { name: "Bánh xèo, hủ tiếu", description: "" },
+    { name: "Trái cây miệt vườn", description: "" },
+  ],
+  "dong-thap": [
+    { name: "Bánh xèo Nam Bộ", description: "" },
+    { name: "Cá lóc nướng trui, lẩu mắm", description: "" },
+    { name: "Gỏi cuốn và bánh tét địa phương", description: "" },
+  ],
+  "an-giang": [
+    { name: "Lẩu mắm", description: "" },
+    { name: "Bún nước lèo (An Giang/Châu Đốc)", description: "" },
+    { name: "Khô cá lóc, đặc sản Châu Đốc", description: "" },
+  ],
+  "kien-giang": [
+    { name: "Lẩu mắm rừng biển, hải sản Phú Quốc / Kiên Giang", description: "" },
+    { name: "Bún kèn Phú Quốc (phiên bản)", description: "" },
+    { name: "Cà-ri hải sản, gỏi cá", description: "" },
+  ],
+  "can-tho": [
+    { name: "Lẩu mắm Cần Thơ", description: "" },
+    { name: "Hủ tiếu Cần Thơ / bún mắm", description: "" },
+    { name: "Các món trái cây miệt vườn, bánh tét", description: "" },
+  ],
+  "hau-giang": [
+    { name: "Lẩu mắm, cá đồng chế biến", description: "" },
+    { name: "Bánh xèo, hủ tiếu miền Tây", description: "" },
+    { name: "Trái cây miệt vườn, đặc sản sông nước", description: "" },
+  ],
+  "soc-trang": [
+    { name: "Bánh pía (Sóc Trăng/phiên bản Bến Tre)", description: "" },
+    { name: "Bún nước lèo, hủ tiếu", description: "" },
+    { name: "Đặc sản khô, mắm miền Tây", description: "" },
+  ],
+  "bac-lieu": [
+    { name: "Gỏi cá Bạc Liêu", description: "" },
+    { name: "Các món hải sản và đặc sản muối mắm", description: "" },
+    { name: "Bánh tét, bánh xèo miền Tây", description: "" },
+  ],
+  "ca-mau": [
+    { name: "Cua biển Cà Mau, hải sản đặc sản", description: "" },
+    { name: "Lẩu mắm, cháo cá mắm", description: "" },
+    { name: "Các món từ tôm, cua đồng", description: "" },
+  ],
+  "dien-bien": [
+    { name: "Thịt trâu gác bếp, lợn bản nướng", description: "" },
+    { name: "Xôi nếp, cơm lam", description: "" },
+    { name: "Măng khô, các món rừng", description: "" },
+  ],
+  "lai-chau": [
+    { name: "Thắng cố (phiên bản Tây Bắc)", description: "" },
+    { name: "Thịt trâu, lợn nướng dân tộc", description: "" },
+    { name: "Các món từ măng rừng, xôi ngũ sắc", description: "" },
+  ],
+  "son-la": [
+    { name: "Bê thui/ lợn bản nướng", description: "" },
+    { name: "Xôi nếp, cơm lam", description: "" },
+    { name: "Mật ong, măng rừng", description: "" },
+  ],
+};
+
+// helper map tries to pick an emoji based on keywords in the dish name
+const emojiMap: Record<string, string> = {
+  "phở": "🍜",
+  "bún": "🍜",
+  "mì": "🍜",
+  "cơm": "🍚",
+  "bánh": "🥟",
+  "cháo": "🥣",
+  "hủ tiếu": "🍜",
+  "lẩu": "🍲",
+  "gỏi": "🥗",
+  "nem": "🥟",
+  "gà": "🍗",
+  "cá": "🐟",
+  "tôm": "🦐",
+  "hải sản": "🦞",
+  "đặc sản": "🍽️",
+  "trà": "🍵",
+}
+
+// apply overrides to main provinces array, inferring emoji when missing
+provinces.forEach((p) => {
+  if (customSpecialties[p.id]) {
+    p.specialties = customSpecialties[p.id].map((spec) => {
+      let emoji = spec.emoji
+      if (!emoji) {
+        const lower = spec.name.toLowerCase()
+        for (const key in emojiMap) {
+          if (lower.includes(key)) {
+            emoji = emojiMap[key]
+            break
+          }
+        }
+      }
+      return { ...spec, emoji: emoji || "🍽️" }
+    })
+  }
+});

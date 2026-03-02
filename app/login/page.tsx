@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { createSupabaseClient } from "app/lib/supabase";
 import { useRouter } from "next/navigation"
+import { useToast } from "app/components/ToastProvider"
 
 export default function LoginPage() {
   const router = useRouter()
@@ -10,9 +11,20 @@ export default function LoginPage() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
+  const { push } = useToast()
 
   const handleLogin = async () => {
-    if (!email || !password) return
+    if (!email || !password) {
+      push("Email và mật khẩu không được để trống")
+      return
+    }
+
+    // simple email format check
+    const emailRegex = /^[^@\s]+@[^@\s]+\.[^@\s]+$/
+    if (!emailRegex.test(email)) {
+      push("Email không hợp lệ")
+      return
+    }
 
     setLoading(true)
 
@@ -24,9 +36,10 @@ export default function LoginPage() {
     setLoading(false)
 
     if (!error) {
+      push("Đăng nhập thành công")
       router.push("/")
     } else {
-      alert(error.message)
+      push(error.message)
     }
   }
 
@@ -98,6 +111,9 @@ export default function LoginPage() {
           >
             Đăng ký
           </span>
+        </p>
+        <p className="text-center mt-2 text-xs text-gray-400">
+          <span className="cursor-pointer hover:underline" onClick={() => push("Liên hệ admin để đặt lại mật khẩu")}>Quên mật khẩu?</span>
         </p>
       </div>
     </div>

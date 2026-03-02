@@ -49,7 +49,7 @@ export default function SpecialtyPage() {
           🗺️ Khám Phá Đặc Sản Vùng Miền
         </h1>
         <p className="text-gray-600 dark:text-gray-400 text-lg">
-          Tìm hiểu về những đặc sản nổi tiếng từ 64 tỉnh thành phố Việt Nam, kể cả Hoàng Sa và Trường Sa
+          Tìm hiểu về những đặc sản nổi tiếng từ 63 tỉnh thành phố Việt Nam
         </p>
       </div>
 
@@ -61,7 +61,7 @@ export default function SpecialtyPage() {
           transition={{ delay: 0.1 }}
           className="bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900/30 dark:to-blue-800/30 p-4 rounded-xl text-center"
         >
-          <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">64</p>
+          <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">63</p>
           <p className="text-xs text-blue-700 dark:text-blue-300 font-semibold">Tỉnh/Thành</p>
         </motion.div>
 
@@ -151,12 +151,15 @@ export default function SpecialtyPage() {
           </div>
           <div className="space-y-2">
             <p className="text-sm text-gray-700 dark:text-gray-300">
-              <span className="font-semibold">2️⃣ Chọn Miền:</span> Sử dụng nút lọc theo miền để thu hẹp kết quả
+              <span className="font-semibold">2️⃣ Chọn Miền/Loại:</span> Sử dụng nút lọc theo miền hoặc biểu tượng món ăn để thu hẹp kết quả
             </p>
           </div>
           <div className="space-y-2">
             <p className="text-sm text-gray-700 dark:text-gray-300">
               <span className="font-semibold">3️⃣ Xem Chi Tiết:</span> Nhấn vào tỉnh để xem thông tin và đặc sản bên phải
+            </p>
+          <p className="text-sm text-gray-700 dark:text-gray-300">
+              <span className="font-semibold">🎲 Ngẫu Nhiên:</span> Hãy thử nút ngẫu nhiên để được gợi ý tỉnh bất kỳ
             </p>
           </div>
         </div>

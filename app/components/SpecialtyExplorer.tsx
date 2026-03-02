@@ -13,12 +13,24 @@ interface SpecialtyExplorerProps {
 export default function SpecialtyExplorer({ onProvinceSelect, userId }: SpecialtyExplorerProps) {
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedRegion, setSelectedRegion] = useState<string | null>(null)
+  const [selectedEmoji, setSelectedEmoji] = useState<string | null>(null)
   const [favorites, setFavorites] = useState<string[]>([])
   const [toast, setToast] = useState<{ show: boolean; message: string }>({ show: false, message: "" })
 
   const regions = ["Miền Bắc", "Miền Trung", "Miền Nam", "Hải Đảo"]
 
   const supabase = createSupabaseClient()
+
+  // derive list of all emojis used by specialties; allow user to filter by type
+  const emojiOptions = useMemo(() => {
+    const set = new Set<string>()
+    provinces.forEach((p) => {
+      p.specialties.forEach((s) => {
+        if (s.emoji) set.add(s.emoji)
+      })
+    })
+    return Array.from(set)
+  }, [])
 
   // load favorites from Supabase when userId becomes available
   useEffect(() => {
@@ -69,8 +81,10 @@ export default function SpecialtyExplorer({ onProvinceSelect, userId }: Specialt
         province.specialties.some((s) => s.name.toLowerCase().includes(term))
 
       const matchRegion = selectedRegion === null || province.region === selectedRegion
+      const matchEmoji =
+        selectedEmoji === null || province.specialties.some((s) => s.emoji === selectedEmoji)
 
-      return matchSearch && matchRegion
+      return matchSearch && matchRegion && matchEmoji
     })
 
     // sort favorites to top
@@ -86,7 +100,7 @@ export default function SpecialtyExplorer({ onProvinceSelect, userId }: Specialt
     }
 
     return list
-  }, [searchTerm, selectedRegion, favorites])
+  }, [searchTerm, selectedRegion, selectedEmoji, favorites])
 
   return (
     <motion.div
@@ -155,10 +169,54 @@ export default function SpecialtyExplorer({ onProvinceSelect, userId }: Specialt
           </motion.button>
         ))}
       </div>
+      {/* Emoji Filter Buttons */}
+      <div className="flex gap-2 flex-wrap mt-2">
+        {emojiOptions.map((emo) => (
+          <motion.button
+            key={emo}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={() => setSelectedEmoji(selectedEmoji === emo ? null : emo)}
+            className={`px-2 py-1 rounded-md text-sm font-medium transition ${
+              selectedEmoji === emo
+                ? 'bg-green-500 text-white'
+                : 'bg-gray-100 dark:bg-neutral-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-neutral-700'
+            }`}
+          >
+            {emo}
+          </motion.button>
+        ))}
+      </div>
 
-      {/* Result Count */}
-      <div className="text-sm text-gray-600 dark:text-gray-400 font-medium">
-        📊 Tìm thấy <span className="text-orange-500 dark:text-orange-400 font-bold">{filteredProvinces.length}</span> kết quả
+      {/* Result Count / actions */}
+      <div className="flex items-center justify-between">
+        <div className="text-sm text-gray-600 dark:text-gray-400 font-medium">
+          📊 Tìm thấy <span className="text-orange-500 dark:text-orange-400 font-bold">{filteredProvinces.length}</span> kết quả
+        </div>
+        <div className="flex gap-2">
+          <button
+            onClick={() => {
+              setSearchTerm("")
+              setSelectedRegion(null)
+              setSelectedEmoji(null)
+            }}
+            className="text-xs text-gray-500 dark:text-gray-400 hover:underline"
+          >
+            ✖️ Xóa bộ lọc
+          </button>
+          <button
+            onClick={() => {
+              if (filteredProvinces.length > 0) {
+                const rand = filteredProvinces[Math.floor(Math.random() * filteredProvinces.length)]
+                onProvinceSelect?.(rand.id)
+              }
+            }}
+            className="text-xs text-orange-500 hover:underline"
+            disabled={filteredProvinces.length === 0}
+          >
+            🎲 Ngẫu nhiên
+          </button>
+        </div>
       </div>
 
       {/* Favorites list */}
@@ -187,15 +245,30 @@ export default function SpecialtyExplorer({ onProvinceSelect, userId }: Specialt
 
       {/* Results Grid */}
       {filteredProvinces.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          {filteredProvinces.map((province, idx) => (
-            <motion.div
-              key={province.id}
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: idx * 0.05 }}
-              className="relative"
-            >
+        <>
+          {/* trending/top row (hidden when user has favorites) */}
+          {!favorites.length && (
+            <div className="flex gap-3 overflow-x-auto pb-2">
+              {filteredProvinces.slice(0,5).map((province) => (
+                <button
+                  key={province.id}
+                  onClick={() => onProvinceSelect?.(province.id)}
+                  className="flex-shrink-0 px-3 py-1 bg-white dark:bg-neutral-900 rounded-full shadow hover:shadow-lg transition text-sm"
+                >
+                  {province.name}
+                </button>
+              ))}
+            </div>
+          )}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            {filteredProvinces.map((province, idx) => (
+              <motion.div
+                key={province.id}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: idx * 0.05 }}
+                className="relative"
+              >
               <motion.button
                 whileHover={{ scale: 1.05, y: -4 }}
                 whileTap={{ scale: 0.95 }}
@@ -231,7 +304,8 @@ export default function SpecialtyExplorer({ onProvinceSelect, userId }: Specialt
               </button>
             </motion.div>
           ))}
-        </div>
+          </div>
+        </>
       ) : (
         <motion.div
           initial={{ opacity: 0 }}
